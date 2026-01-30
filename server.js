@@ -7,6 +7,13 @@ const { createClient } = require("@supabase/supabase-js");
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
+
+console.log("Checando variáveis:", supabaseUrl ? "URL OK" : "URL AUSENTE");
+
+if (!supabaseUrl || !supabaseKey) {
+    console.error("ERRO CRÍTICO: Variáveis de ambiente não encontradas!");
+}
+
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 app.use(express.json());
