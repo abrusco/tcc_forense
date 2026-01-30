@@ -54,7 +54,10 @@
         </div>
         <div class="form-group">
             <label for="senha">Senha (6 a 10 caracteres):</label>
-            <input type="password" id="senha" minlength="6" maxlength="10" required placeholder="Digite a senha">
+            <div style="position: relative;">
+                <input type="password" id="senha" minlength="6" maxlength="10" required placeholder="Digite a senha" style="padding-right: 40px;">
+                <span id="toggleSenha" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; user-select: none;">👁️</span>
+            </div>
         </div>
         <button type="submit">Cadastrar</button>
     </form>
@@ -73,6 +76,13 @@
         toast.className = "show";
         setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
     }
+
+    document.getElementById('toggleSenha').addEventListener('click', function() {
+        const senhaInput = document.getElementById('senha');
+        const type = senhaInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        senhaInput.setAttribute('type', type);
+        this.textContent = type === 'password' ? '👁️' : '🙈';
+    });
 
     document.getElementById('cadastroForm').addEventListener('submit', function(e) {
         e.preventDefault();
