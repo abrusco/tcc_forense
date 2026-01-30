@@ -84,7 +84,8 @@
         .then(response => response.json())
         .then(data => {
             showToast(data.mensagem, "#27ae60");
-            document.getElementById('cadastroForm').reset();
+            // document.getElementById('cadastroForm').reset();
+            document.getElementById('senha').value = '';
         })
         .catch(error => showToast("Erro ao conectar com o servidor", "#e74c3c"));
     });

