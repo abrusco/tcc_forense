@@ -5,8 +5,8 @@ const app = express();
 require('dotenv').config();
 const { createClient } = require("@supabase/supabase-js");
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_KEY;
+const supabaseUrl = "https://wefnbyawuhvwlesxfatz.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndlZm5ieWF3dWh2d2xlc3hmYXR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk3NTkzODYsImV4cCI6MjA4NTMzNTM4Nn0.vFWcS-VGa90TlL-SH5zIwPjVrnlWj7KRCKwwV1qoo00";
 
 console.log("Checando variáveis:", supabaseUrl ? "URL OK" : "URL AUSENTE");
 
@@ -53,4 +53,4 @@ app.get('/download', async (req, res) => {
     res.status(200).send(csv);
 });
 
-app.listen(process.env.PORT || 3000, () => console.log('Servidor rodando na porta 3000'));
+app.listen(3000, () => console.log('Servidor rodando na porta 3000'));
