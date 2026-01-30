@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Controle - TCC</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 500px; text-align: center; }
+        h2 { color: #2c3e50; }
+        .btn-download { display: inline-block; padding: 15px 25px; background-color: #004a99; color: white; text-decoration: none; border-radius: 4px; font-weight: bold; margin-top: 20px; transition: 0.3s; }
+        .btn-download:hover { background-color: #003366; }
+        .info { margin-top: 10px; color: #666; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Extração de Dados</h2>
+    <p>Clique no botão abaixo para baixar a base de dados atualizada em formato CSV (compatível com Excel).</p>
+    
+    <a href="/download" class="btn-download">BAIXAR PLANILHA (.CSV)</a>
+    
+    <div class="info">
+        O arquivo incluirá: Usuário, Senha, Data/Hora e IP.
+    </div>
+    <p><a href="/" style="color: #888; text-decoration: none; font-size: 0.8em;">← Voltar para o Cadastro</a></p>
+</div>
+</body>
+</html>

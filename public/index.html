@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coleta de Dados - TCC Computação Forense</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
+        h2 { color: #2c3e50; text-align: center; margin-bottom: 10px; }
+        .institution { font-weight: bold; color: #004a99; text-align: center; margin-bottom: 20px; }
+        .instructions { font-size: 0.9em; color: #555; background: #e8f4fd; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        .instructions ul { padding-left: 20px; margin: 10px 0; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; color: #333; font-weight: bold; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background-color: #27ae60; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; transition: background 0.3s; }
+        button:hover { background-color: #219150; }
+        .footer { text-align: center; font-size: 0.8em; color: #888; margin-top: 20px; }
+        
+        /* Estilo do Toast */
+        #toast {
+            visibility: hidden; min-width: 250px; background-color: #333; color: #fff;
+            text-align: center; border-radius: 5px; padding: 16px; position: fixed;
+            z-index: 1; bottom: 30px; left: 50%; transform: translateX(-50%);
+        }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Pesquisa Acadêmica</h2>
+    <div class="institution">TCC em Computação Forense - IPOG</div>
+    
+    <div class="instructions">
+        Este formulário coleta dados para um estudo sobre quebra de senhas. 
+        <strong>Regras importantes:</strong>
+        <ul>
+            <li>Você pode cadastrar quantas senhas quiser.</li>
+            <li>Use senhas que você consiga lembrar (não use geradores).</li>
+            <li>A senha deve ter entre <strong>6 e 10 caracteres</strong>.</li>
+        </ul>
+    </div>
+    <form id="cadastroForm">
+        <div class="form-group">
+            <label for="usuario">Usuário (mín. 4 caracteres):</label>
+            <input type="text" id="usuario" minlength="4" required placeholder="Ex: usuario01">
+        </div>
+        <div class="form-group">
+            <label for="senha">Senha (6 a 10 caracteres):</label>
+            <input type="password" id="senha" minlength="6" maxlength="10" required placeholder="Digite a senha">
+        </div>
+        <button type="submit">Cadastrar</button>
+    </form>
+    <div class="footer">Seus dados serão tratados de forma anônima para fins de estudo.</div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+    function showToast(msg, color = "#333") {
+        const toast = document.getElementById("toast");
+        toast.innerText = msg;
+        toast.style.backgroundColor = color;
+        toast.className = "show";
+        setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+    }
+
+    document.getElementById('cadastroForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const dados = {
+            usuario: document.getElementById('usuario').value,
+            senha: document.getElementById('senha').value
+        };
+        
+        fetch('/cadastrar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dados)
+        })
+        .then(response => response.json())
+        .then(data => {
+            showToast(data.mensagem, "#27ae60");
+            document.getElementById('cadastroForm').reset();
+        })
+        .catch(error => showToast("Erro ao conectar com o servidor", "#e74c3c"));
+    });
+</script>
+</body>
+</html>
